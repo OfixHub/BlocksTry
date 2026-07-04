@@ -1,0 +1,33 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Build output logs (dev only)
+app_build*.txt
+build_log*.txt
+build_output*.txt
+gradle_tasks_output.txt
+output.txt
+shared_build_log.txt
+tv_build.txt
+wear_compile.txt
+stacktrace.txt
+capture_build.ps1
+
+# Downloaded theme assets (fetched at runtime from GitHub Releases)
+app/src/main/assets/themes/*/
+
+# Google services (Firebase removed)
+google-services.json
