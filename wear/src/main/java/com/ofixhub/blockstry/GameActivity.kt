@@ -62,9 +62,9 @@ import androidx.wear.compose.material.ScalingLazyColumn
 import androidx.wear.compose.material.Switch
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.ToggleChip
-import androidx.wear.compose.navigation.SwipeDismissableNavHost
-import androidx.wear.compose.navigation.composable
-import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -144,9 +144,9 @@ fun WearApp(gameViewModel: GameViewModel, activity: ComponentActivity) {
     }
 
     MaterialTheme(colors = MaterialTheme.colors.copy(background = theme.backgroundColor)) {
-        val navController = rememberSwipeDismissableNavController()
+        val navController = rememberNavController()
 
-        SwipeDismissableNavHost(
+        NavHost(
             navController = navController,
             startDestination = "game"
         ) {

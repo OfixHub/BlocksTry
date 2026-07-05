@@ -100,7 +100,13 @@ object SettingsManager {
     }
 
     fun addTheme(theme: ColorTheme) {
-        themes[theme.name] = theme
+        // Preserve localPath if theme is already downloaded and incoming has none
+        val existing = themes[theme.name]
+        themes[theme.name] = if (existing?.localPath != null && theme.localPath == null) {
+            theme.copy(localPath = existing.localPath)
+        } else {
+            theme
+        }
     }
 
     var highScore by mutableStateOf(0)

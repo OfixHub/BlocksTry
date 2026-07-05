@@ -57,6 +57,7 @@ dependencies {
     debugImplementation("androidx.wear.compose:compose-ui-tooling:1.3.1")
 
     implementation(libs.activity.compose)
+    implementation(libs.navigation.compose)
     implementation(libs.core.splashscreen)
     implementation(libs.tiles)
     implementation(libs.tiles.material)
