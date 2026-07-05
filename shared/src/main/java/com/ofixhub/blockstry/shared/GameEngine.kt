@@ -27,7 +27,7 @@ data class Point(val x: Int, val y: Int)
 enum class PieceType { I, O, T, J, L, S, Z }
 data class Piece(val shape: List<Point>, val color: Color, val type: PieceType)
 data class GameState(
-    val board: List<List<Color>>,
+    val board: List<List<PieceType?>>,
     val currentPiece: Piece?,
     val piecePosition: Point,
     val nextPiece: Piece?,
@@ -87,7 +87,7 @@ class GameViewModel : ViewModel() {
     }
 
     private fun createInitialGameState(): GameState {
-        val emptyBoard = List(BOARD_HEIGHT) { List(BOARD_WIDTH) { SettingsManager.currentTheme.backgroundColor } }
+        val emptyBoard = List(BOARD_HEIGHT) { List(BOARD_WIDTH) { null as PieceType? } }
         return GameState(board = emptyBoard, currentPiece = null, piecePosition = Point(0, 0), nextPiece = null, isGameOver = false, score = 0, ghostPiecePosition = null)
     }
 
@@ -243,20 +243,20 @@ class GameViewModel : ViewModel() {
             val newX = position.x + p.x
             val newY = position.y + p.y
             newX in 0 until BOARD_WIDTH && newY < BOARD_HEIGHT &&
-                    (newY < 0 || _gameState.value.board.getOrNull(newY)?.getOrNull(newX) == SettingsManager.currentTheme.backgroundColor)
+                    (newY < 0 || _gameState.value.board.getOrNull(newY)?.getOrNull(newX) == null)
         }
     }
 
     private fun lockPiece() {
         val currentState = gameState.value
         val piece = currentState.currentPiece ?: return
-        val newBoard = currentState.board.map { it.toMutableList() }
+        val newBoard = currentState.board.map { it.toMutableList<PieceType?>() }
 
         piece.shape.forEach { p ->
             val x = currentState.piecePosition.x + p.x
             val y = currentState.piecePosition.y + p.y
             if (y >= 0 && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH) {
-                newBoard[y][x] = piece.color
+                newBoard[y][x] = piece.type
             }
         }
         _gameState.update { it.copy(currentPiece = null, board = newBoard) }
@@ -265,7 +265,7 @@ class GameViewModel : ViewModel() {
     private suspend fun clearLines() {
         val board = _gameState.value.board
         val fullLineIndices = board.mapIndexedNotNull { index, row ->
-            if (row.all { it != SettingsManager.currentTheme.backgroundColor }) index else null
+            if (row.all { it != null }) index else null
         }
         
         if (fullLineIndices.isNotEmpty()) {
@@ -280,7 +280,7 @@ class GameViewModel : ViewModel() {
                 val currentBoard = state.board
                 val remainingLines = currentBoard.filterIndexed { index, _ -> index !in fullLineIndices }
                 val linesCleared = fullLineIndices.size
-                val newLines = List(linesCleared) { List(BOARD_WIDTH) { SettingsManager.currentTheme.backgroundColor } }
+                val newLines = List(linesCleared) { List(BOARD_WIDTH) { null as PieceType? } }
                 val nextBoard = newLines + remainingLines
                 
                 val newTotalLines = state.totalLinesCleared + linesCleared

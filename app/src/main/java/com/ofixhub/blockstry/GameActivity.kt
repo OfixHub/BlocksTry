@@ -481,11 +481,11 @@ fun BlocksTryGameScreen(
         drawBoardGeneric(boardLeftOffset, boardTopOffset, BOARD_WIDTH, BOARD_HEIGHT, cellPixelSize, borderBitmap, backgroundBitmap)
         
         gameState.board.forEachIndexed { y, row ->
-            row.forEachIndexed { x, color ->
-                if (color != SettingsManager.currentTheme.backgroundColor) {
-                    val index = SettingsManager.currentTheme.pieceColors.indexOf(color)
-                    val pieceType = if (index >= 0) PieceType.values().getOrNull(index) else null
-                    drawCell(boardLeftOffset + x * cellPixelSize, boardTopOffset + y * cellPixelSize, cellPixelSize, color, if (pieceType != null) pieceBitmaps[pieceType] else null)
+            row.forEachIndexed { x, pieceType ->
+                if (pieceType != null) {
+                    val pieceIndex = PieceType.values().indexOf(pieceType)
+                    val color = SettingsManager.currentTheme.pieceColors.getOrElse(pieceIndex) { SettingsManager.currentTheme.gridColor }
+                    drawCell(boardLeftOffset + x * cellPixelSize, boardTopOffset + y * cellPixelSize, cellPixelSize, color, pieceBitmaps[pieceType])
                 }
             }
         }
@@ -537,7 +537,8 @@ fun SnakeGameScreen(
         val boardMarginBottom = screenHeight * 0.05f
         val boardMaxHeight = screenHeight - headerHeight - boardMarginBottom
         
-        val cellSize = boardMaxHeight / boardHeight
+        // Constrain cell size to fit both screen height and width
+        val cellSize = minOf(boardMaxHeight / boardHeight, size.width / boardWidth)
         val boardPixelWidth = cellSize * boardWidth
         val boardPixelHeight = cellSize * boardHeight
 
