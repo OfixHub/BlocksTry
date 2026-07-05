@@ -3,15 +3,14 @@
 import android.content.Context
 import androidx.wear.tiles.TileService
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.protolayout.ResourceBuilders
-import androidx.wear.tiles.EventBuilders
+import androidx.wear.tiles.TileBuilders
+import androidx.wear.tiles.TimelineBuilders
+import androidx.wear.tiles.ActionBuilders
 import androidx.wear.tiles.LayoutElementBuilders
 import androidx.wear.tiles.ModifiersBuilders
 import androidx.wear.tiles.ColorBuilders
 import androidx.wear.tiles.DimensionBuilders
-import androidx.wear.tiles.TileBuilders
-import androidx.wear.tiles.TimelineBuilders
-import androidx.wear.tiles.ActionBuilders
+import androidx.wear.protolayout.ResourceBuilders
 import com.ofixhub.blockstry.R
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -91,7 +90,7 @@ private fun tileLayout(context: Context): LayoutElementBuilders.LayoutElement {
                                 .setAndroidActivity(
                                     ActionBuilders.AndroidActivity.Builder()
                                         .setClassName("com.ofixhub.blockstry.GameActivity")
-                                        .setPackageName("com.ofixhub.blockstry")
+                                        .setPackageName("com.blockstry")
                                         .build()
                                 )
                                 .build()
