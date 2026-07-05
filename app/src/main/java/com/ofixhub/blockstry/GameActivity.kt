@@ -836,10 +836,10 @@ fun SettingsScreen(
     
     var ghostPieceEnabled by remember { mutableStateOf(SettingsManager.isGhostPieceEnabled) }
     var gridEnabled by remember { mutableStateOf(SettingsManager.isGridEnabled) }
-    var currentThemeName by remember { mutableStateOf(SettingsManager.currentThemeName) }
+    // Read theme name reactively from SettingsManager so it updates when changed in ThemeStore
+    val currentThemeName = SettingsManager.currentThemeName
     var constantSpeedEnabled by remember { mutableStateOf(SettingsManager.isConstantSpeedEnabled) }
-    var currentGame by remember { mutableStateOf(SettingsManager.currentGame) }
-    var isDownloading by remember { mutableStateOf(false) }
+    val currentGame = SettingsManager.currentGame
 
     // Fetch themes from GitHub on enter
     LaunchedEffect(Unit) {
@@ -884,8 +884,7 @@ fun SettingsScreen(
             item {
                 Button(
                     onClick = {
-                        val nextGame = if (currentGame == "Tetris") "Snake" else "Tetris"
-                        currentGame = nextGame
+                        val nextGame = if (SettingsManager.currentGame == "Tetris") "Snake" else "Tetris"
                         SettingsManager.updateCurrentGame(nextGame)
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -894,50 +893,11 @@ fun SettingsScreen(
             }
 
             item {
-                val themeNames = SettingsManager.themes.keys.toList()
-                Button(
-                    onClick = {
-                        if (isDownloading) return@Button
-                        
-                        val currentIndex = themeNames.indexOf(currentThemeName)
-                        val nextIndex = (currentIndex + 1) % themeNames.size
-                        val nextThemeName = themeNames[nextIndex]
-                        val nextTheme = SettingsManager.themes[nextThemeName]!!
-                        val manifest = nextTheme.remoteManifest
-
-                        if (!nextTheme.isDownloaded && manifest != null) {
-                            scope.launch {
-                                isDownloading = true
-                                val success = repository.downloadThemeAssets(manifest)
-                                isDownloading = false
-                                if (success) {
-                                    val localPath = repository.getDownloadedThemeDir(nextTheme.id).absolutePath
-                                    SettingsManager.addTheme(manifest.toColorTheme(localPath))
-                                    currentThemeName = nextThemeName
-                                    SettingsManager.updateCurrentThemeName(nextThemeName)
-                                    snackbarHostState.showSnackbar("Tema '$nextThemeName' descargado y aplicado")
-                                } else {
-                                    snackbarHostState.showSnackbar("No se pudo descargar el tema '$nextThemeName'")
-                                }
-                            }
-                        } else {
-                            currentThemeName = nextThemeName
-                            SettingsManager.updateCurrentThemeName(nextThemeName)
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = !isDownloading
-                ) {
-                    Text(if (isDownloading) "Descargando..." else "Tema: $currentThemeName")
-                }
-            }
-
-            item {
                 Button(
                     onClick = onNavigateToThemeStore,
                     modifier = Modifier.fillMaxWidth(),
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color(0xFF6A0DAD))
-                ) { Text("Tienda de Temas", color = Color.White) }
+                ) { Text("Tienda de Temas  •  Activo: $currentThemeName", color = Color.White) }
             }
 
             item {
