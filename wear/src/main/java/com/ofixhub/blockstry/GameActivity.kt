@@ -303,6 +303,7 @@ fun UniversalGameContainer(
                 } else {
                     var lastTapTime = 0L
                     var fastDropJob: Job? = null
+                    var pauseJob: Job? = null
                     awaitEachGesture {
                         val down = awaitFirstDown()
                         val downTime = System.currentTimeMillis()
@@ -312,9 +313,18 @@ fun UniversalGameContainer(
                             inputHandler.onRotate()
                             lastTapTime = 0L
                             fastDropJob?.cancel()
+                            pauseJob?.cancel()
                             return@awaitEachGesture
                         }
                         fastDropJob = scope.launch { delay(300); inputHandler.onSetFastDrop(true) }
+                        var pauseTriggered = false
+                        pauseJob = scope.launch {
+                            delay(900)
+                            fastDropJob?.cancel()
+                            inputHandler.onSetFastDrop(false)
+                            pauseTriggered = true
+                            inputHandler.onTogglePause()
+                        }
                         var lastPosition = downPosition
                         var hasDragged = false
                         var totalDragX = 0f
@@ -323,11 +333,9 @@ fun UniversalGameContainer(
                             val event = awaitPointerEvent()
                             if (event.changes.all { !it.pressed }) {
                                 fastDropJob?.cancel()
+                                pauseJob?.cancel()
                                 inputHandler.onSetFastDrop(false)
-                                if (hasDragged && totalDragY > 80f && abs(totalDragY) > abs(totalDragX) * 1.5f) {
-                                    inputHandler.onTogglePause()
-                                }
-                                if (!hasDragged) lastTapTime = downTime
+                                if (!pauseTriggered && !hasDragged) lastTapTime = downTime
                                 break
                             }
                             event.changes.forEach { change ->
@@ -340,6 +348,7 @@ fun UniversalGameContainer(
                                     if (abs(totalDragX) > threshold || abs(totalDragY) > threshold) {
                                         change.consume()
                                         hasDragged = true
+                                        pauseJob?.cancel() // cancelar pausa si el usuario arrastra
                                         if (abs(totalDragX) > abs(totalDragY)) {
                                             if (totalDragX > threshold) { inputHandler.onMoveRight(); totalDragX = 0f }
                                             else if (totalDragX < -threshold) { inputHandler.onMoveLeft(); totalDragX = 0f }

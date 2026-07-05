@@ -356,6 +356,7 @@ fun UniversalGameContainer(
                 } else {
                     var lastTapTime = 0L
                     var fastDropJob: Job? = null
+                    var pauseJob: Job? = null
                     
                     awaitEachGesture {
                         val down = awaitFirstDown()
@@ -367,10 +368,19 @@ fun UniversalGameContainer(
                             inputHandler.onRotate()
                             lastTapTime = 0L
                             fastDropJob?.cancel()
+                            pauseJob?.cancel()
                             return@awaitEachGesture
                         }
                         
                         fastDropJob = scope.launch { delay(300); inputHandler.onSetFastDrop(true) }
+                        var pauseTriggered = false
+                        pauseJob = scope.launch {
+                            delay(900)
+                            fastDropJob?.cancel()
+                            inputHandler.onSetFastDrop(false)
+                            pauseTriggered = true
+                            inputHandler.onTogglePause()
+                        }
                         
                         var lastPosition = downPosition
                         var hasDragged = false
@@ -381,14 +391,16 @@ fun UniversalGameContainer(
                             val event = awaitPointerEvent()
                             if (event.changes.all { !it.pressed }) {
                                 fastDropJob?.cancel()
+                                pauseJob?.cancel()
                                 inputHandler.onSetFastDrop(false)
                                 
-                                // Gesto de pausa: Deslizar hacia abajo significativamente (> 150px)
-                                if (hasDragged && totalDragY > 150f && abs(totalDragY) > abs(totalDragX) * 1.5f) {
-                                    inputHandler.onTogglePause()
+                                if (!pauseTriggered) {
+                                    // Swipe-down pause (móvil)
+                                    if (hasDragged && totalDragY > 150f && abs(totalDragY) > abs(totalDragX) * 1.5f) {
+                                        inputHandler.onTogglePause()
+                                    }
+                                    if (!hasDragged) lastTapTime = downTime
                                 }
-                                
-                                if (!hasDragged) lastTapTime = downTime
                                 break
                             }
                             event.changes.forEach { change ->
@@ -402,6 +414,7 @@ fun UniversalGameContainer(
                                     if (abs(totalDragX) > threshold || abs(totalDragY) > threshold) {
                                         change.consume()
                                         hasDragged = true
+                                        pauseJob?.cancel() // cancelar pausa si el usuario arrastra
                                         
                                         if (abs(totalDragX) > abs(totalDragY)) {
                                             if (totalDragX > threshold) {
@@ -412,8 +425,6 @@ fun UniversalGameContainer(
                                                 totalDragX = 0f
                                             }
                                         } else {
-                                            // Solo procesamos Up/Down si no es el gesto largo de pausa (se evalúa al soltar)
-                                            // O para juegos como Snake que necesitan movimiento inmediato
                                             if (totalDragY > threshold) {
                                                 inputHandler.onMoveDown()
                                                 totalDragY = 0f
