@@ -1239,7 +1239,9 @@ fun ThemeStoreScreen(onBack: () -> Unit) {
                                 else -> Button(
                                     onClick = {
                                         SettingsManager.updateCurrentThemeName(theme.name)
-                                        snackbarHostState.showSnackbar("Tema '${theme.name}' aplicado")
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar("Tema '${theme.name}' aplicado")
+                                        }
                                     },
                                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color(0xFF1565C0))
                                 ) { Text("Aplicar", fontSize = 12.sp) }
