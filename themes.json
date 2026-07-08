@@ -1,0 +1,98 @@
+{
+  "themes": [
+    {
+      "id": "classic",
+      "name": "Clásico",
+      "pieceColors": ["#00FFFF", "#FFFF00", "#FF00FF", "#0000FF", "#FFA500", "#00FF00", "#FF0000"],
+      "backgroundColor": "#000000",
+      "gridColor": "#444444",
+      "buttonColor": "#AAAAAA",
+      "buttonTextColor": "#000000",
+      "snakeColor": "#00FF00",
+      "foodColor": "#FF0000",
+      "hasCustomAssets": false,
+      "version": "1.0.0"
+    },
+    {
+      "id": "ocean",
+      "name": "Océano",
+      "pieceColors": ["#80DEEA", "#4DD0E1", "#26C6DA", "#00BCD4", "#00ACC1", "#0097A7", "#00838F"],
+      "backgroundColor": "#001F3F",
+      "gridColor": "#003366",
+      "buttonColor": "#0077B6",
+      "buttonTextColor": "#FFFFFF",
+      "snakeColor": "#4DD0E1",
+      "foodColor": "#FF6B35",
+      "hasCustomAssets": false,
+      "version": "1.0.0"
+    },
+    {
+      "id": "forest",
+      "name": "Bosque",
+      "pieceColors": ["#A5D6A7", "#81C784", "#66BB6A", "#4CAF50", "#43A047", "#388E3C", "#2E7D32"],
+      "backgroundColor": "#1B4332",
+      "gridColor": "#2D6A4F",
+      "buttonColor": "#40916C",
+      "buttonTextColor": "#FFFFFF",
+      "snakeColor": "#66BB6A",
+      "foodColor": "#FF6B35",
+      "hasCustomAssets": false,
+      "version": "1.0.0"
+    },
+    {
+      "id": "sunset",
+      "name": "Atardecer",
+      "pieceColors": ["#FF8A65", "#FF7043", "#FF5722", "#F4511E", "#E64A19", "#D84315", "#BF360C"],
+      "backgroundColor": "#1A0A00",
+      "gridColor": "#4A1000",
+      "buttonColor": "#FF5722",
+      "buttonTextColor": "#FFFFFF",
+      "snakeColor": "#FF8A65",
+      "foodColor": "#FFEB3B",
+      "hasCustomAssets": false,
+      "version": "1.0.0"
+    },
+    {
+      "id": "galaxy",
+      "name": "Galaxia",
+      "pieceColors": ["#CE93D8", "#BA68C8", "#AB47BC", "#9C27B0", "#8E24AA", "#7B1FA2", "#6A1B9A"],
+      "backgroundColor": "#0A0015",
+      "gridColor": "#1A0030",
+      "buttonColor": "#7B1FA2",
+      "buttonTextColor": "#FFFFFF",
+      "snakeColor": "#CE93D8",
+      "foodColor": "#F48FB1",
+      "hasCustomAssets": false,
+      "version": "1.0.0"
+    },
+    {
+      "id": "invierno",
+      "name": "Invierno",
+      "pieceColors": ["#FFFFFF", "#F5F5F5", "#E0F7FA", "#B3E5FC", "#81D4FA", "#4FC3F7", "#29B6F6"],
+      "backgroundColor": "#E3F2FD",
+      "gridColor": "#90CAF9",
+      "buttonColor": "#64B5F6",
+      "buttonTextColor": "#FFFFFF",
+      "snakeColor": "#29B6F6",
+      "foodColor": "#FF6B35",
+      "hasCustomAssets": true,
+      "archiveUrl": "https://github.com/OfixHub/BlocksTry/releases/download/v1.0.0/invierno.zip",
+      "version": "1.0.0"
+    },
+    {
+      "id": "egipto",
+      "name": "Egipto",
+      "pieceColors": ["#FFFFFF", "#F5F5DC", "#FFD54F", "#FFB300", "#FF8F00", "#FF6F00", "#E65100"],
+      "backgroundColor": "#3E2723",
+      "gridColor": "#5D4037",
+      "buttonColor": "#FFB300",
+      "buttonTextColor": "#000000",
+      "snakeColor": "#FFD54F",
+      "foodColor": "#E53935",
+      "hasCustomAssets": true,
+      "archiveUrl": "https://github.com/OfixHub/BlocksTry/releases/download/v1.0.0/egipto.zip",
+      "version": "1.0.0"
+    }
+  ],
+  "games": []
+}
